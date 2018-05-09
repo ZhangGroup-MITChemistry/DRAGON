@@ -1,10 +1,43 @@
 # ![DRAGON logo](https://github.com/qiyf/images/blob/master/logo2.png)
 
+[![GitHub shield](https://img.shields.io/badge/GitHub-DRAGON-orange.svg?style=flat)](https://github.com/ZhangGroup-MITChemistry/DRAGON) [![](https://img.shields.io/badge/version-latest-yellow.svg)](https://github.com/ZhangGroup-MITChemistry/DRAGON) [![bioRxiv shield](https://img.shields.io/badge/bioRxiv-1709.01233-green.svg?style=flat)](https://www.biorxiv.org/content/early/2018/03/15/282095) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+## Contents
+
+- [Overview](#overview)
+
+- [System Requirements](#system-requirements)
+
+- [Installation](#installation)
+
+- [Usage](#usage)
+
+  + [Process Epigenomics Data](#i-process-epigenomics-data)
+
+  + [Run Molecular Dynamics Simulation](#ii-run-molecular-dynamics-simulation)
+
+  + [Analyze Chromatin Conformation](#iii-analyze-chromatin-conformation)
+
+- [License](./LICENSE)
+
+## Overview
+
 DRAGON is a software package to enable De novo, and RAtional prediction of Genome organizatiON. It provides an implementation of the model proposed in the [manuscript](https://www.biorxiv.org/content/early/2018/03/15/282095) to simulate chromatin structure and dynamics. With DRAGON, one can predict the structure of a 25Mb long chromatin region from a variety of cell types using genome-wide profiles of histone modifications and CTCF molecules. 
 
-The package is mainly written in Python, and it streamlines all the necessary steps to process [epigenomics data](./processEpigenomicsData/), to perform [molecular dynamics simulations](./runMolecularDynamics/) and to analyze [predicted conformational ensemble](./analyzeChromatinConformation/) for the chromatin. 
+The package is mainly written in [Python](https://www.python.org/), and it streamlines all the necessary steps to process [epigenomics data](./processEpigenomicsData/), to perform [molecular dynamics simulations](./runMolecularDynamics/) and to analyze [predicted conformational ensemble](./analyzeChromatinConformation/) for the chromatin. 
+
+## System Requirements
+
+### Hardware
+
+DRAGON requires a single cpu (serial) or multiple cpus (parallel) with standard RAM to run molecular dynamics simulations. For a decent level of preformance, we recommend computing node with 14+ cores, 2.6+ GHz/core. All simulations in our [manuscript](https://www.biorxiv.org/content/early/2018/03/15/282095) are performed on an Intel Xeon E5-2690 v4 2.6Ghz node with 14 cores. 
+
+### Operating System
+
+The package is supported for Linux operating systems. It had been tested on the system Linux CentOS 6.8.
 
 ## Installation
+
 DRAGON can be installed by running the following command:
 ```
 git clone https://github.com/ZhangGroup-MITChemistry/DRAGON.git
@@ -20,6 +53,8 @@ DRAGON uses [LAMMPS](http://lammps.sandia.gov/), a molecular dynamics software p
 ```
 
 Note that the [GCC](https://gcc.gnu.org/) compiler needs to be installed beforehand and an environment of [OpenMPI](https://www.open-mpi.org/) is needed to compile the parallel version of LAMMPS. 
+
+On a "normal" desktop computer, the typical install time including download and compile steps is ~ 5 minutes. 
 
 ## Usage
 
