@@ -1,0 +1,627 @@
+LAMMPS (16 Mar 2018)
+#   ----    This script is the lammps input to construct the initial structure of chromosome  ----
+
+units           lj
+atom_style      full
+boundary        s   s   s
+special_bonds   lj 0.0 0.0 1.0 extra 512
+
+read_data       data.chromosome
+  orthogonal box = (-160 -160 -160) to (160 160 160)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  8000 atoms
+  scanning bonds ...
+  1 = max bonds/atom
+  scanning angles ...
+  1 = max angles/atom
+  reading bonds ...
+  7999 bonds
+  reading angles ...
+  7998 angles
+  2 = max # of 1-2 neighbors
+  2 = max # of 1-3 neighbors
+  4 = max # of 1-4 neighbors
+  518 = max # of special neighbors
+
+neighbor        0.4 bin
+neigh_modify    every 1 delay 1
+atom_modify     sort 0 0.0
+
+bond_style      class2
+bond_coeff      1 2.0 20.0 20.0 20.0
+
+pair_style      lj/cut 1.12
+pair_modify     shift yes
+pair_coeff      1 1 1.0 1.0 1.12
+
+velocity        all create 1 492845 rot yes mom yes dist gaussian
+fix             1 all nve
+fix             2 all langevin 1.0 1.0 5 4928459
+
+group           chrom id 1:8000
+8000 atoms in group chrom
+group2ndx       groups.ndx
+Writing groups to index file groups.ndx:
+ writing group all... done
+ writing group chrom... done
+
+
+#   ----    Apply collective variable to condense the structure ----
+fix             3 all colvars ../../../gyration.colvars output out
+fix_modify      3 energy yes
+
+thermo          100
+thermo_style    custom time temp pe etotal press vol
+dump            1 all dcd 100 DUMP_FILE.dcd
+dump_modify     1 unwrap yes
+
+timestep        0.006
+
+minimize        1.0e-4 1.0e-6 100 1000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:168)
+WARNING: Using fix colvars with minimization (../fix_colvars.cpp:399)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 1.52
+  ghost atom cutoff = 1.52
+  binsize = 0.76, bins = 218 209 189
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair lj/cut, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+colvars: Creating proxy instance
+colvars: ----------------------------------------------------------------------
+colvars: Initializing the collective variables module, version 2018-01-17.
+colvars: Please cite Fiorin et al, Mol Phys 2013:
+colvars:  http://dx.doi.org/10.1080/00268976.2013.813594
+colvars: in any publication based on this calculation.
+colvars: Using LAMMPS interface, version 2017-12-01.
+colvars: ----------------------------------------------------------------------
+colvars: Reading new configuration from file "../../../gyration.colvars":
+colvars: # indexFile = "groups.ndx"
+colvars: The following index groups were read from the index file "groups.ndx":
+colvars:   System (8000 atoms).
+colvars:   chrom (8000 atoms).
+colvars: # smp = on [default]
+colvars: # analysis = off [default]
+colvars: # colvarsTrajFrequency = 100
+colvars: # colvarsRestartFrequency = 100
+colvars: # scriptedColvarForces = off [default]
+colvars: # scriptingAfterBiases = on [default]
+colvars: ----------------------------------------------------------------------
+colvars:   Initializing a new collective variable.
+colvars:   # name = "chrom"
+colvars:   Initializing a new "gyration" component.
+colvars:     # componentCoeff = 1 [default]
+colvars:     # componentExp = 1 [default]
+colvars:     # period = 0 [default]
+colvars:     # wrapAround = 0 [default]
+colvars:     # forceNoPBC = off [default]
+colvars:     # scalable = on [default]
+colvars:       Initializing atom group "atoms".
+colvars:       # name = "" [default]
+colvars:       # centerReference = off [default]
+colvars:       # rotateReference = off [default]
+colvars:       # atomsOfGroup = "" [default]
+colvars:       # indexGroup = "chrom"
+colvars:       # psfSegID =  [default]
+colvars:       # atomsFile = "" [default]
+colvars:       # dummyAtom = ( 0 , 0 , 0 ) [default]
+colvars:       # enableForces = on [default]
+colvars:       # enableFitGradients = on [default]
+colvars:       Atom group "atoms" defined, 8000 atoms initialized: total mass = 8000, total charge = 0.
+colvars:   All components initialized.
+colvars:   # timeStepFactor = 1 [default]
+colvars:   # width = 1
+colvars:   # lowerBoundary = 0 [default]
+colvars:   # upperBoundary = 0 [default]
+colvars:   # expandBoundaries = off [default]
+colvars:   # extendedLagrangian = off [default]
+colvars:   # outputValue = on [default]
+colvars:   # outputVelocity = off [default]
+colvars:   # outputTotalForce = off [default]
+colvars:   # outputAppliedForce = off [default]
+colvars:   # subtractAppliedForce = off [default]
+colvars: ----------------------------------------------------------------------
+colvars: Collective variables initialized, 1 in total.
+colvars: ----------------------------------------------------------------------
+colvars:   Initializing a new "harmonic" instance.
+colvars:   # name = "h_pot"
+colvars:   # colvars = { chrom }
+colvars:   # outputEnergy = on
+colvars:   # timeStepFactor = 1 [default]
+colvars:   # writeTISamples = off [default]
+colvars:   # writeTIPMF = off [default]
+colvars:   # centers = { 1 }
+colvars:   # targetCenters = { 1 } [default]
+colvars:   # outputCenters = off [default]
+colvars:   # forceConstant = 400
+colvars:   # targetForceConstant = -1 [default]
+colvars: ----------------------------------------------------------------------
+colvars: Collective variables biases initialized, 1 in total.
+colvars: ----------------------------------------------------------------------
+colvars: Collective variables module (re)initialized.
+colvars: ----------------------------------------------------------------------
+colvars: Re-initialized atom group chrom:0/0. 8000 atoms: total mass = 8000.
+colvars: The restart output state file will be "rest.colvars.state".
+colvars: The final output state file will be "out.colvars.state".
+colvars: Writing to colvar trajectory file "out.colvars.traj".
+colvars: Re-initialized atom group chrom:0/0. 8000 atoms: total mass = 8000.
+Per MPI rank memory allocation (min/avg/max) = 56.39 | 56.39 | 56.39 Mbytes
+Time Temp PotEng TotEng Press Volume 
+           0            1    131.68983    133.18964  0.046867232    3751875.2 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         0.6            1    101.80731    103.30712 0.0024141483    3456670.8 
+colvars: Saving collective variables state to "out.colvars.state".
+Loop time of 0.805334 on 1 procs for 100 steps with 8000 atoms
+
+92.7% CPU use with 1 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+         131.689828758      101.971183927      101.807306829
+  Force two-norm initial, final = 7385.42 287.73
+  Force max component initial, final = 152.866 9.09762
+  Final line search alpha, max atom move = 0.0158665 0.144347
+  Iterations, force evaluations = 100 100
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.043306   | 0.043306   | 0.043306   |   0.0 |  5.38
+Bond    | 0.052517   | 0.052517   | 0.052517   |   0.0 |  6.52
+Neigh   | 0.48873    | 0.48873    | 0.48873    |   0.0 | 60.69
+Comm    | 0.0040123  | 0.0040123  | 0.0040123  |   0.0 |  0.50
+Output  | 0.00099301 | 0.00099301 | 0.00099301 |   0.0 |  0.12
+Modify  | 0.14622    | 0.14622    | 0.14622    |   0.0 | 18.16
+Other   |            | 0.06955    |            |       |  8.64
+
+Nlocal:    8000 ave 8000 max 8000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    8792 ave 8792 max 8792 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 8792
+Ave neighs/atom = 1.099
+Ave special neighs/atom = 5.9985
+Neighbor list builds = 28
+Dangerous builds = 0
+run           13000
+colvars: Re-initialized atom group chrom:0/0. 8000 atoms: total mass = 8000.
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+Per MPI rank memory allocation (min/avg/max) = 57.06 | 57.06 | 57.06 Mbytes
+Time Temp PotEng TotEng Press Volume 
+           0            1    101.80731    103.30712 0.0024197464    3448673.7 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         0.6    1.8716283    100.43684    103.24393 0.0029032157    3384382.5 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         1.2    4.5397495    95.668904    102.47768 0.0097511705    3138735.1 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         1.8    8.0868335    88.429392    100.55813  0.021143524    2831991.4 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         2.4    11.905116    79.432648    97.288089  0.036747405    2476758.3 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+           3    15.569789    69.354491    92.706255  0.057676949      2090175 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         3.6    18.668056    58.847878    86.846462   0.08741148    1670616.7 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         4.2     21.04587    48.484661     80.04952   0.12719117    1299320.7 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         4.8     22.47541    38.735182    72.444084   0.18100668    979050.65 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         5.4    23.092038    29.948574    64.582301   0.26243011    696709.62 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+           6    22.866222    22.326785     56.62183   0.39194729     465294.6 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         6.6    21.842322    16.068367    48.827756   0.59280844    299832.11 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         7.2    20.280523    11.200372    41.617354   0.90055618    190727.07 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         7.8    18.178689    7.8003463    35.064971    1.4551921    111296.95 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         8.4    15.583266    5.9394812    29.311458    2.4265951    65279.158 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+           9    12.604607     5.741002    24.645549    4.2730085    36651.816 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+         9.6    9.5924125    6.6817672    21.068587    5.4450612    24900.023 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        10.2    7.9138746    6.4092923     18.27862    2.4755378    33690.164 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        10.8    6.6760584    5.9714925    15.984328   0.99402411    51748.372 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        11.4    5.4278162    6.0531974    14.193904   0.42199719    73407.922 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          12    4.2791827    6.3905295    12.808501   0.20082162    98267.338 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        12.6    3.3131046    6.8284086    11.797444   0.11530705    116350.48 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        13.2    2.6422546    7.1329433     11.09583  0.071810814    128161.67 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        13.8    2.2001908    7.2893104    10.589184  0.052634378     138330.7 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        14.4    1.9682141    7.2557472    10.207699  0.043598463    140174.64 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          15     1.864723    7.0894993    9.8862342  0.057674987    135278.66 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        15.6    1.8600814    6.7895011    9.5792743  0.063100992     128956.4 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        16.2    1.9060791     6.408471    9.2672323  0.082795017    122187.19 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        16.8    1.9853334    5.9471738    8.9248017   0.11701225    110926.92 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        17.4    2.0564081    5.4658265     8.550053   0.18322767    92854.946 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          18    2.1096071    5.0108017    8.1748168   0.25061057    77488.494 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        18.6    2.1269973    4.5781494    7.7682466   0.35862755    62562.774 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        19.2    2.0577976    4.2606485    7.3469591   0.50218696    51951.947 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        19.8    1.9567039    4.0501323    6.9848213   0.69757826     43838.45 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        20.4    1.8372983    3.9040739    6.6596769    0.7843825    38507.609 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          21    1.7035654    3.7879438    6.3429726   0.84235978    35468.201 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        21.6    1.5923572    3.7241678    6.1124049   0.80412955    33900.532 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        22.2    1.4806511    3.6835373    5.9042363   0.70229075    33590.254 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        22.8    1.3751003    3.6847878    5.7471804   0.54889831    37380.484 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        23.4    1.2829119    3.7134407     5.637568   0.42542259    39237.929 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          24    1.1947625    3.7629023     5.554822   0.34349494    42575.531 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        24.6    1.1326907    3.7942377    5.4930614   0.31385675    44397.062 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        25.2    1.1139196    3.7855713    5.4562417   0.30846539    45015.073 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        25.8    1.0958145    3.7856557     5.429172   0.29315671    45363.076 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        26.4    1.0809332    3.7760995    5.3972966   0.31489374    44680.734 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          27    1.0806068    3.7615371    5.3822447   0.34287756    43181.755 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        27.6    1.1060154    3.6833032     5.342119   0.37462926    42426.811 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        28.2    1.0994061    3.6493823    5.2982854   0.41170569    41221.396 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        28.8    1.1126145    3.5999601    5.2686732   0.44511436     40314.54 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        29.4    1.1230484    3.5280223    5.2123844   0.46529925    38194.502 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          30    1.1008976    3.5385464    5.1896864    0.4883525    36435.057 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        30.6    1.1137264     3.482981    5.1533618   0.51552636    35137.772 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        31.2    1.0870258    3.4793032    5.1096381   0.49100536      36477.2 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        31.8    1.0704069    3.4754274    5.0808371   0.46972754    35910.503 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        32.4     1.069089     3.447792     5.051225   0.47042183    36622.561 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          33    1.0509001    3.4479543    5.0241073   0.44257677    37840.912 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        33.6    1.0402641    3.4664988    5.0266998   0.42468197    40597.315 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        34.2    1.0345303    3.4551829    5.0067844   0.39407755    40728.751 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        34.8    1.0208228    3.4657221     4.996765   0.37475298    41352.848 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        35.4    1.0129668    3.4758686    4.9951288   0.36700253    42305.843 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          36    1.0105383    3.4646784    4.9802963   0.36503873     42399.51 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        36.6     1.006049    3.4636973    4.9725821   0.36504665    40754.526 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        37.2    1.0035771    3.4576204    4.9627979   0.37171878    38304.446 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        37.8    1.0168867    3.4411717    4.9663111   0.39990547    37559.079 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        38.4    1.0232853    3.4279946    4.9627307   0.40387427    38825.136 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          39    1.0163725     3.421043    4.9454112   0.42795619    39380.483 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        39.6     1.013991    3.4262734    4.9470698   0.45486228    36986.234 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        40.2    1.0065794    3.4232212    4.9329016   0.42615773    38248.825 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        40.8    1.0070806    3.4156864    4.9261184   0.41959607    38350.886 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        41.4   0.99785011    3.4187682    4.9153563   0.40190696     38135.46 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          42    1.0045569     3.411904    4.9185509   0.39895308    37842.614 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        42.6    1.0147608    3.3983548    4.9203058   0.43202059    37492.462 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        43.2    1.0086721    3.3987718    4.9115908   0.41527284    37884.066 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        43.8    1.0077803    3.3977399    4.9092213   0.44062849    38230.873 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        44.4    1.0076363    3.3953712    4.9066367   0.40795059    39079.911 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          45    1.0090526    3.3894188    4.9028086   0.42122807    38717.653 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        45.6    1.0007548    3.3996177    4.9005622   0.40424235    38235.394 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        46.2    1.0103656    3.3935734    4.9089324   0.42037398    38382.373 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        46.8    1.0001097    3.3968989     4.896876   0.42582764    38797.426 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        47.4    1.0115032    3.3812551    4.8983202    0.4447147    37931.246 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          48    1.0006638    3.3905964    4.8914044   0.45105459    37262.515 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        48.6    1.0014063    3.3951572    4.8970788   0.45368812    37629.532 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        49.2    0.9875557    3.4050046     4.886153   0.43587658    37357.806 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        49.8   0.98982088    3.4041568    4.8887026      0.42425      38630.7 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        50.4   0.99053435    3.4028102     4.888426   0.40905588     38301.86 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          51   0.98918723    3.4066616     4.890257   0.40432454    38677.148 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        51.6   0.98880717     3.395415    4.8784403   0.39016059    38468.411 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        52.2   0.98857097    3.4058697    4.8885408    0.3961576    38878.756 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        52.8   0.98811998    3.4073194    4.8893141   0.40903928    38348.897 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        53.4     1.003773    3.3998073    4.9052786   0.41405587    38606.034 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          54    1.0069294    3.3974661    4.9076715   0.42902081    38221.125 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        54.6    1.0046962    3.3937676    4.9006235   0.42208861    38482.175 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        55.2   0.99686176    3.3994176    4.8945233   0.39891099    39317.695 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        55.8    1.0050489    3.3946127    4.9019977   0.41329788    38664.002 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        56.4    1.0003442    3.3954735    4.8958023   0.41446798    38782.373 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          57    1.0028288    3.3923201    4.8963752   0.39311667    40426.306 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        57.6    1.0013035     3.384948    4.8867154     0.397812    41145.607 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        58.2    0.9877458    3.3972589    4.8786924   0.40200923    40352.926 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        58.8    1.0059336     3.386373    4.8950848   0.41475412    39131.053 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        59.4    1.0081754    3.3948005    4.9068745   0.39293659     39048.02 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          60    1.0146897      3.38012    4.9019643   0.36680884    40504.969 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        60.6    1.0017088    3.3875408    4.8899162    0.3793028     40885.35 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        61.2    1.0006884    3.3972109    4.8980559   0.38069774     40470.57 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        61.8    1.0027822    3.3889405    4.8929258   0.39365199    40319.191 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        62.4    1.0016933    3.4000016    4.9023538   0.40566655    39520.662 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          63    1.0032177    3.3806888    4.8853272    0.3727943    40692.386 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        63.6   0.99119972    3.3930579    4.8796717   0.37804528    41237.296 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        64.2    1.0009521    3.3797106    4.8809511   0.39620934    40125.995 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        64.8   0.99471198     3.390595    4.8824765   0.38853237    39872.602 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        65.4   0.99920803    3.3831816    4.8818063   0.41026092    38083.959 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          66    1.0083427    3.3649455    4.8772706   0.41784037    38068.075 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        66.6   0.99876868    3.3679972    4.8659629   0.40419797    38990.997 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        67.2   0.98905639    3.3701994    4.8535985   0.41596287    39002.823 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        67.8   0.99658091    3.3772172    4.8719017    0.3790659    41528.877 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        68.4   0.98472122    3.3950137    4.8719109   0.41992069    39881.252 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          69   0.98745871    3.3861609    4.8671638   0.39736641    38569.815 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        69.6   0.98265067    3.3889678    4.8627596   0.39547324     38030.97 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        70.2   0.99478058    3.3810643    4.8730486   0.40527909    36689.417 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        70.8   0.99834873    3.3753107    4.8726466   0.43705458    37420.993 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        71.4   0.99203158    3.3886977    4.8765591   0.43952291    36370.898 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          72   0.99469212    3.3978778    4.8897294   0.42772423    36896.843 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        72.6    1.0003644    3.3897537    4.8901127   0.43423579    37546.727 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        73.2   0.98949741    3.4070803    4.8911409   0.45475777    35983.105 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        73.8    1.0004926     3.382403    4.8829543   0.43932364    35479.144 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        74.4   0.99492775    3.3858638    4.8780688    0.4455251    36352.282 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          75   0.99747442    3.3918909    4.8879155   0.42161302    36594.913 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        75.6    1.0076534    3.3829543    4.8942454   0.44667483    36122.828 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        76.2    1.0091332    3.3824769    4.8959876   0.46148856      36686.3 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        76.8    1.0054087    3.3760481    4.8839726   0.46427848    36922.173 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+        77.4    1.0062564    3.3794135    4.8886094   0.41260755    37890.478 
+colvars: Synchronizing (emptying the buffer of) trajectory file "out.colvars.traj".
+colvars: Saving collective variables state to "rest.colvars.state".
+          78   0.99835001    3.3831847    4.8805225   0.42509326    39052.763 
+colvars: Saving collective variables state to "out.colvars.state".
+Loop time of 38.4573 on 1 procs for 13000 steps with 8000 atoms
+
+Performance: 175238.557 tau/day, 338.037 timesteps/s
+94.1% CPU use with 1 MPI tasks x no OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 4.5841     | 4.5841     | 4.5841     |   0.0 | 11.92
+Bond    | 3.1061     | 3.1061     | 3.1061     |   0.0 |  8.08
+Neigh   | 10.596     | 10.596     | 10.596     |   0.0 | 27.55
+Comm    | 0.16486    | 0.16486    | 0.16486    |   0.0 |  0.43
+Output  | 1.823      | 1.823      | 1.823      |   0.0 |  4.74
+Modify  | 17.413     | 17.413     | 17.413     |   0.0 | 45.28
+Other   |            | 0.7694     |            |       |  2.00
+
+Nlocal:    8000 ave 8000 max 8000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    25559 ave 25559 max 25559 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 25559
+Ave neighs/atom = 3.19488
+Ave special neighs/atom = 5.9985
+Neighbor list builds = 2179
+Dangerous builds = 0
+colvars: Resetting the Collective Variables Module.
+
+Please see the log.cite file for references relevant to this simulation
+
+Total wall time: 0:00:39

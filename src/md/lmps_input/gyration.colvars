@@ -1,0 +1,23 @@
+
+colvarsTrajFrequency    100  # output every 10 steps
+colvarsRestartFrequency 100
+indexFile               groups.ndx
+
+colvar {
+    name    chrom
+    width   1 
+    gyration {
+        atoms {
+            indexGroup chrom
+        }
+    }
+}
+
+harmonic {
+  name              h_pot
+  colvars           chrom
+  centers           1.0
+  forceConstant     400
+  outputEnergy      yes
+}
+

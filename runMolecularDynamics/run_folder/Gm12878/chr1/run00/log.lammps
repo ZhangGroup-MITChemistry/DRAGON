@@ -1,0 +1,154 @@
+LAMMPS (16 Mar 2018)
+variable        rseed equal   4928459
+#  ----    Settings  ----
+variable        hT   equal   3.0
+variable        T   equal   1.0
+
+units           lj
+atom_style      full
+bond_style      class2
+boundary        s   s   s
+
+special_bonds   lj 0.0 0.0 1.0 extra 512
+
+read_data       ../../../../inputFiles/lmps_input/Gm12878/data.chromosome.chr1
+  orthogonal box = (-12.869 -13.783 -12.466) to (12.928 13.119 12.86)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  5000 atoms
+  scanning bonds ...
+  1 = max bonds/atom
+  scanning angles ...
+  1 = max angles/atom
+  reading bonds ...
+  4999 bonds
+  reading angles ...
+  4998 angles
+  2 = max # of 1-2 neighbors
+  2 = max # of 1-3 neighbors
+  4 = max # of 1-4 neighbors
+  518 = max # of special neighbors
+
+neighbor        0.4 bin
+neigh_modify    every 1 delay 1
+atom_modify     sort 0 0.0
+
+#   ----    Force Field     ----
+bond_coeff    	1 2.0 20.0 20.0 20.0
+angle_style  	cosine
+angle_coeff   	1 2.0
+
+#   ----    Energy funtion  ----
+pair_style      hybrid/overlay table linear 10000 tanhlr/cut/ideala 6.0 0 15 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//ucs_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/inputFiles/epig_input/chromStates/Gm12878/Gm12878_chr1_chromatin_states_From20MbTo45Mb.txt tanhlr/cut/ideal 6.0 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//uctcf_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/inputFiles/epig_input/ctcfSites/Gm12878/Gm12878_chr1_ctcf_index_From20MbTo45Mb.txt 4
+pair_coeff       * * table /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//soft_core_lj_4kT.table soft_core_lj 1.12
+WARNING: 4174 of 10006 force values in table are inconsistent with -dE/dr.
+  Should only be flagged at inflection points (../pair_table.cpp:481)
+WARNING: 9976 of 10006 distance values in table with relative error
+  over 1e-06 to re-computed values (../pair_table.cpp:490)
+WARNING: 1 of 10006 lines in table were incomplete
+  or could not be parsed completely (../pair_table.cpp:499)
+pair_coeff      * *  tanhlr/cut/ideal     0.0  1.76  3.72
+pair_coeff      * *  tanhlr/cut/ideala     0.0 1.76  3.72
+pair_modify     tabinner 0.0000000001 shift yes
+
+thermo          10000
+thermo_style    custom time temp pe etotal epair ebond eangle press vol
+thermo_modify   norm no flush yes
+
+#  ----    Spherical confinement  ----
+region             nucleus sphere 0.0 0.0 0.0 26.56193 side in
+fix             wall all wall/region nucleus lj126 1.0 1.0 1.12
+
+#  ----    Minimization  ----
+minimize        1.0e-4 1.0e-6 100 1000
+WARNING: Using 'neigh_modify every 1 delay 0 check yes' setting during minimization (../min.cpp:168)
+Neighbor list info ...
+  update every 1 steps, delay 0 steps, check yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.4
+  ghost atom cutoff = 6.4
+  binsize = 3.2, bins = 9 9 8
+  3 neighbor lists, perpetual/occasional/extra = 3 0 0
+  (1) pair table, perpetual
+      attributes: half, newton on
+      pair build: half/bin/newton
+      stencil: half/bin/3d/newton
+      bin: standard
+  (2) pair tanhlr/cut/ideala, perpetual, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+  (3) pair tanhlr/cut/ideal, perpetual, copy from (1)
+      attributes: half, newton on
+      pair build: copy
+      stencil: none
+      bin: none
+Per MPI rank memory allocation (min/avg/max) = 28.28 | 28.28 | 28.28 Mbytes
+Time Temp PotEng TotEng E_pair E_bond E_angle Press Volume 
+           0            0    122720.58    122720.58   -9440.7181    124796.82    7364.4717    5.6285236    17506.974 
+         0.5            0    1971.6667    1971.6667   -9815.8443    133.27032    11654.241  -0.18202516     20245.42 
+Loop time of 16.1291 on 1 procs for 100 steps with 5000 atoms
+
+98.6% CPU use with 1 MPI tasks x no OpenMP threads
+
+Minimization stats:
+  Stopping criterion = max iterations
+  Energy initial, next-to-last, final = 
+         122720.577169      2014.92815556      1971.66674767
+  Force two-norm initial, final = 6753.72 70.9161
+  Force max component initial, final = 279.983 14.5162
+  Final line search alpha, max atom move = 0.00580849 0.0843173
+  Iterations, force evaluations = 100 100
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 14.766     | 14.766     | 14.766     |   0.0 | 91.55
+Bond    | 0.056235   | 0.056235   | 0.056235   |   0.0 |  0.35
+Neigh   | 1.2626     | 1.2626     | 1.2626     |   0.0 |  7.83
+Comm    | 0.0018504  | 0.0018504  | 0.0018504  |   0.0 |  0.01
+Output  | 0.00020289 | 0.00020289 | 0.00020289 |   0.0 |  0.00
+Modify  | 0.01435    | 0.01435    | 0.01435    |   0.0 |  0.09
+Other   |            | 0.02824    |            |       |  0.18
+
+Nlocal:    5000 ave 5000 max 5000 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:    0 ave 0 max 0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:    1.26854e+06 ave 1.26854e+06 max 1.26854e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 1268544
+Ave neighs/atom = 253.709
+Ave special neighs/atom = 5.9976
+Neighbor list builds = 26
+Dangerous builds = 0
+
+#  ----    Energy and velocity  ----
+fix             1 all   nve
+velocity        all create ${hT} ${rseed} rot yes mom yes dist gaussian
+velocity        all create 3 ${rseed} rot yes mom yes dist gaussian
+velocity        all create 3 4928459 rot yes mom yes dist gaussian
+
+#  ----    High temperature equilibration  ----
+#dump            1 all dcd 2000 DUMP_FILE_highT.dcd
+#dump_modify     1 unwrap yes
+#timestep        0.006
+#fix             2 all langevin ${hT} ${T} 0.5 ${rseed}
+#run		 4000000
+
+# ----    Normal temperature  ----
+#undump          1
+#unfix           2
+dump            2 all dcd 2000 DUMP_FILE.dcd
+dump_modify     2 unwrap yes
+timestep        0.012
+fix             3 all langevin ${T} ${T} 0.5 ${rseed}
+fix             3 all langevin 1 ${T} 0.5 ${rseed}
+fix             3 all langevin 1 1 0.5 ${rseed}
+fix             3 all langevin 1 1 0.5 4928459
+run             40000000
+Per MPI rank memory allocation (min/avg/max) = 27.99 | 27.99 | 27.99 Mbytes
+Time Temp PotEng TotEng E_pair E_bond E_angle Press Volume 
+           0            3    1971.6667    24467.167   -9815.8443    133.27032    11654.241   0.55955945     20215.59 

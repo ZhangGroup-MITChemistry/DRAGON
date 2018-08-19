@@ -1,0 +1,14 @@
+This LAMMPS simulation made specific use of work described in the
+following references.  See http://lammps.sandia.gov/cite.html
+for details.
+
+fix colvars command:
+
+@Article{fiorin13,
+ author =  {G.~Fiorin and M.{\,}L.~Klein and J.~H{\'e}nin},
+ title =   {Using collective variables to drive molecular dynamics simulations},
+ journal = {Mol.~Phys.},
+ year =    2013,
+ note =    {doi: 10.1080/00268976.2013.813594}
+}
+

@@ -1,0 +1,18 @@
+configuration {
+  step        13000
+  dt 6.000000e-03
+  version 2018-01-17
+}
+
+colvar {
+  name chrom
+  x  1.14004868809898e+01
+}
+
+restraint {
+  configuration {
+    step 13000
+    name h_pot
+  }
+}
+
