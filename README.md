@@ -22,7 +22,7 @@
 
 ## Overview
 
-DRAGON is a software package to enable De novo, and RAtional prediction of Genome organizatiON. It provides an implementation of the model proposed in the [manuscript](https://www.biorxiv.org/content/early/2018/03/15/282095) to simulate chromatin structure and dynamics. With DRAGON, one can predict the structure of a 25Mb long chromatin region from a variety of cell types using genome-wide profiles of histone modifications and CTCF molecules. 
+DRAGON is a software package to enable De novo, and RAtional prediction of Genome organizatiON. It provides an implementation of the model proposed in the [manuscript](https://www.biorxiv.org/content/early/2018/03/15/282095) to simulate chromatin structure and dynamics. With DRAGON, one can predict cell type specific chromosome structures using genome-wide profiles of histone modifications and CTCF molecules. 
 
 The package is mainly written in [Python](https://www.python.org/), and it streamlines all the necessary steps to process [epigenomics data](./processEpigenomicsData/), to perform [molecular dynamics simulations](./runMolecularDynamics/) and to analyze [predicted conformational ensemble](./analyzeChromatinConformation/) for the chromatin. 
 
@@ -62,9 +62,9 @@ DRAGON models the chromatin as a coarse-grained bead-spring polymer, with each b
 
 ![Flow chart](https://github.com/qiyf/images/blob/master/flow_chart.png)
 
-We further provide step-by-step instructions below to simulate the structure of chromosome 1 from GM12878 cells. All the executable scripts are provided in the [`./example/`](./example/) folder. 
+We further provide step-by-step instructions below to simulate the structure of a 25 MB long region of chromosome 1 from GM12878 cells. All the executable scripts are provided in the [`./example/`](./example/) folder. 
 
-A [python script](./runMolecularDynamics/main.py) is also provided to set up simulations for other chromosomes from different cell types. It streamlines all the steps below together and can launch multiple parallel simulations. See [README](./runMolecularDynamics/README.md) for its detailed usage.
+**To simulate chromosome regions from other cell types with different lengths**, we recommend using the [python script](./runMolecularDynamics/main.py) that is more comprehensive. It streamlines all the steps below together and can launch multiple parallel simulations. See [README](./runMolecularDynamics/README.md) for its detailed usage.
 
 
 ### I) Process Epigenomics Data
@@ -123,10 +123,6 @@ Third, one needs to incorporate the epigenomic inputs produced from the step abo
 ```
 
 This script produces a [topology file](./runMolecularDynamics/inputFiles/lmps_input/Gm12878/data.chromosome.chr1) that stores the Cartesian coordinates of each polymer beads and the connectivity among polymer beads, an [input file](./runMolecularDynamics/run_folder/Gm12878/chr1/run00/in.chromosome) that instructs the specifics of the molecular dynamics simulation, and a [bash script](./runMolecularDynamics/run_folder/Gm12878/chr1/run00/run.sh) to execute LAMMPS.
-
-Note that the example scripts in this section generate LAMMPS input files for chromosome 1, GM12878 cell with the genomic region indicated in the chromatin region [txt file](./src/chr_region.txt) generated in the section [Select a 25Mb chromatin region](#select-a-25mb-chromatin-region). If a genomic region of different length is desire, simply change the chromatin region [txt file](./src/chr_region.txt). If the desired length of the genomic region is not available in the folder [`./src/md/lmps_input/`](./src/md/lmps_input/) (named data.chromosome.init[length in Mb]), a process of generating initial configuration with desired length of the genomic region will be activated. We first generated a random polymer structure inside a spherical confinement, and then performed equilibration simulation using only the homopolymer potential, U(r), to relax both the topology and energy of the polymer structure. The last configuration from the equilibration simulation is then used for our chromosome simulations. 
-
-Several genomic region lengths are already pre-calculated and available in the folder [`./src/md/lmps_input/`](./src/md/lmps_input/): 25Mb, 30Mb, 40Mb, 50Mb, 60Mb, 70Mb, 80Mb, 90Mb, 100Mb, 120Mb, 150Mb, and 200Mb. Note that if a new genomic length other than these options is desired, simulation toolkit [HOOMD-blue](http://glotzerlab.engin.umich.edu/hoomd-blue/) as well as the binary distribution of [VMD](http://www.ks.uiuc.edu/Research/vmd/) will also be needed. The installation of these two packages are straightforward. Once the [VMD](http://www.ks.uiuc.edu/Research/vmd/) package is downloaded, set the PATH environment variable to include the directory where the vmd bin is located. 
 
 #### Run simulation
 
