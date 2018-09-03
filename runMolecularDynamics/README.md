@@ -22,6 +22,11 @@ The items enclosed in the brackets [] are optional parameters that are used to p
 
 Any number from 1 to 22 can be included in this list.
 
+**[--chrRegion]** specifies the genomic regions of interest for each chromosome specified in [--chrom]. The accepted format is:
+> [(20,45), (20,45), (20,45)]
+
+The number of entries included in the list [] must be same as those in [--chrom]. The unit of these numbers is million base pairs. We recommend simulating chromosome regions of 25Mb or less for computational efficiency and accuracy, but longer regions are possible.  
+
 **[--lmpsdir]** specifies the path to the compiled LAMMPS binary file, and the accepted format is:
 > `/path-to-LAMMPS-folder/src/`. 
 
