@@ -19,10 +19,12 @@ The items enclosed in the brackets [] are optional parameters that are used to p
 
 **[--chrom]** specifies the list of chromosomes to be simulated. The accepted format is:
 > [1,2,4]
+
 Any number from 1 to 22 can be included in this list.
 
 **[--lmpsdir]** specifies the path to the compiled LAMMPS binary file, and the accepted format is:
 > `/path-to-LAMMPS-folder/src/`. 
+
 See [README](../README.md) for more details on installing LAMMPS.  
 
 **[--step]** specifies the number of MD steps that will be performed. The default value is set to be 40 million steps.  
