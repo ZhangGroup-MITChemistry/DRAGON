@@ -84,21 +84,16 @@ To start simulating chromatin structures, the following steps are necessary in o
 
 #### Select a 25Mb chromatin region
 
-First, one needs to select a 25Mb long chromatin region of interest (the default setting for this example running is chr1:20-45Mb from GM12878 cells) by running the following script 
+First, one needs to select a 25Mb long chromatin region of interest (the default setting for this example is chr1:20-45Mb from GM12878 cells) by running the following script 
 
 ```
 ./example/2-selectChromatinRegion.sh
 ```
 
-DRAGON currently can only simulate chromatin regions with a fixed length of 25Mb, but generalization to whole chromosomes is straightforward. 
-
-This script produces a [txt file](./src/chr_region.txt) that lists the region of interested for each chromosome in the following format:
+This script produces a [txt file](./src/chr_region.txt) that lists the region of interested in the following format:
 ```
 chromosome_id     start_position(Mb)      end_position(Mb)  
 1                 20                      45  
-2                 20                      45  
-3                 20                      45  
-4                 20                      45   
 ```
 
 If a different chromatin region is desired, one can either directly modify the generated chromatin region [txt file](./src/chr_region.txt) or modified the parameters in the original script [`./example/2-selectChromatinRegion.sh`](./example/2-selectChromatinRegion.sh) and then regenerate the file.
