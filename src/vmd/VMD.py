@@ -1,7 +1,6 @@
 # generate the VMD scripts
 from Ipt_module import *
 from Params import *
-Params()
 
 class VMD():
 
@@ -37,8 +36,8 @@ class VMD():
 
 		# ----	this function could generate pdb file with chromatin states
 
-		gSta = chr_region[chrId-1,1]
-		gEnd = chr_region[chrId-1,2]
+		gSta = chr_region[str(chrId)][0]
+		gEnd = chr_region[str(chrId)][1]
 		global sepDist
 		sepDist = gEnd-gSta
 		global nbead

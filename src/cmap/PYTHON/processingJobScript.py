@@ -1,22 +1,21 @@
 # generate the job script and submit the job
 from Ipt_module import *
 from Params import *
-Params()
 
-def processingJobScript(celltype,runnum,jobname,ptn,chrom_lst):
+def processingJobScript(celltype,njob,jobname,ptn,chrom_lst):
 # ---- generate the job script for calculating the contact map ---- #
 	src_path = '%s/../../src/cmap/FORTRAN/'%glb_path
 	ipt_path = '../../runMolecularDynamics/run_folder/'
 
 	for chrId in chrom_lst:
-		gSta = chr_region[chrId-1,1]
-		gEnd = chr_region[chrId-1,2]
+		gSta = chr_region[str(chrId)][0]
+		gEnd = chr_region[str(chrId)][1]
 		sepDist = gEnd-gSta
 		nbead = int(sepDist*Mb/resolution)
 		# ---- default: calculate cmap of 80% region in the middle ---- #
 		startb = nbead*0.08;
 		endb = nbead*0.88;
-		for runid in xrange(runnum):
+		for runid in xrange(njob):
 			dcd_path  = '%s/%s/%s/chr%d/run%02d/'\
 						%(glb_path,ipt_path,celltype,chrId,runid)
 			cmap_path = './%s/chr%d/run%02d/'\

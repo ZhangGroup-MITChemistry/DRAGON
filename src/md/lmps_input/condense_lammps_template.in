@@ -11,8 +11,8 @@ neighbor        0.4 bin
 neigh_modify    every 1 delay 1
 atom_modify     sort 0 0.0
 
-bond_style      class2
-bond_coeff      1 2.0 20.0 20.0 20.0
+bond_style      fene
+bond_coeff      1 30.0 1.5 1.0 1.0
 
 pair_style      lj/cut 1.12
 pair_modify     shift yes
@@ -20,7 +20,7 @@ pair_coeff      1 1 1.0 1.0 1.12
 
 velocity        all create 1 492845 rot yes mom yes dist gaussian
 fix             1 all nve
-fix             2 all langevin 1.0 1.0 5 4928459
+fix             2 all langevin 1.0 1.0 1 4928459
 
 groupid
 group2ndx       groups.ndx
@@ -37,4 +37,4 @@ dump_modify     1 unwrap yes
 timestep        0.006
 
 minimize        1.0e-4 1.0e-6 100 1000
-run             10000
+run             25000

@@ -1,23 +1,21 @@
 # combine to generate ensemble average contact map
 from Ipt_module import *
 from Params import *
-Params()
 
-def combineMaps(celltype,runnum,chrId):
+def combineMaps(celltype,njob,chrId):
 # ---- combine the contact map of individual parallel running ---- #
 	nf_tot = 0
-	gSta = chr_region[chrId-1,1]
-	gEnd = chr_region[chrId-1,2]
+	gSta = chr_region[str(chrId)][0]
+	gEnd = chr_region[str(chrId)][1]
 	sepDist = gEnd-gSta
 	nbead = int(sepDist*Mb/resolution)
 	nbead_cg = int(nbead/cg_fac*0.8);
 	comb_map = np.zeros([nbead_cg,nbead_cg])
 
-	cmap_path = '%s/%s/chr%d/'\
-				%(glb_path,celltype,chrId)
+	cmap_path = '%s/%s/chr%d/'%(glb_path,celltype,chrId)
 
-	if os.path.exists('%s/run%02d/contact_map_CG.txt'%(cmap_path,runnum-1)):
-		for runid in range(0,runnum):
+	if os.path.exists('%s/run%02d/contact_map_CG.txt'%(cmap_path,njob-1)):
+		for runid in range(0,njob):
 			in_temp = np.loadtxt('%s/run%02d/contact_map_CG.txt'%(cmap_path,runid))
 			nf = np.loadtxt('%s/run%02d/nframes.txt'%(cmap_path,runid))
 

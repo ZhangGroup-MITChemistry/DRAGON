@@ -12,14 +12,15 @@ def writein_2d(to_path,to_path_file,writeinfile):
 	fw.close()
 
 
-def writein_ctcf(celltype,chrId,cap,writeinfile,chr_region):
+def writein_ctcf(celltype,chrId,cap,writeinfile,chr_region,flag):
 	
 #	----	write in the matrix in the original form	---- #
-	gSta = chr_region[chrId-1,1]
-	gEnd = chr_region[chrId-1,2]
-	to_path = './%s/rawCTCF.%dbp/'%(celltype,cap)
-	to_path_file = '%s_chr%d_ctcf_%dMbTo%dMb.txt'%(celltype,chrId,gSta,gEnd)
-	writein_2d(to_path,to_path_file,writeinfile)
+	if flag:
+		gSta = chr_region[str(chrId)][0]
+		gEnd = chr_region[str(chrId)][1]
+		to_path = './%s/rawCTCF.%dbp/'%(celltype,cap)
+		to_path_file = '%s_chr%d_ctcf_%dMbTo%dMb.txt'%(celltype,chrId,gSta,gEnd)
+		writein_2d(to_path,to_path_file,writeinfile)
 
 
 def writein_motif(chrId,opt,writeinfile):

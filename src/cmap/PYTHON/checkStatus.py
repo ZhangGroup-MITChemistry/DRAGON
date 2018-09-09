@@ -1,7 +1,6 @@
 # check running status
 from Ipt_module import *
 from Params import *
-Params()
 
 def checkStatus(usr_name,job_name):
 # ---- check the job status ---- #

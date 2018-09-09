@@ -8,7 +8,7 @@ The PDB file provides the Cartesian coordinates of the structure. The PSF file d
 
 Usage:
 ```
-python VMDmain.py [-C Celltype] [-c chromosome_id_array]
+python VMDmain.py --Cell <Celltype> --chrom <chromosome_id_array>
 ```
 The manual would be available by executing:  
 ```

@@ -93,7 +93,7 @@ First, one needs to select a 25Mb long chromatin region of interest (the default
 This script produces a [txt file](./src/chr_region.txt) that lists the region of interested in the following format:
 ```
 chromosome_id     start_position(Mb)      end_position(Mb)  
-1                 20                      45  
+{"1":             [20,                    45]}  
 ```
 
 If a different chromatin region is desired, one can either directly modify the generated chromatin region [txt file](./src/chr_region.txt) or modified the parameters in the original script [`./example/2-selectChromatinRegion.sh`](./example/2-selectChromatinRegion.sh) and then regenerate the file.

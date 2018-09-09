@@ -1,15 +1,15 @@
 from Ipt_module import *
 from Params import *
-Params()
 
 from writeinfunc import *
 
 class GenCTCFinput():
 
-	def __init__(self,celltype,chrId,cap):
+	def __init__(self,celltype,chrId,cap,flag):
 		self.celltype 	= celltype
 		self.chrId 		= chrId
 		self.cap 		= cap
+		self.flag 		= flag
 
 	def convert2sq(self,ctcf_path,nbead):
 	#	----	processing into complete sequence	---- #
@@ -77,25 +77,26 @@ class GenCTCFinput():
 	def generate(self):
 	#	----	generate the input data format for the model 	---- #
 	#	----	common bead:3	CTCF+:1	CTCF-:2	CTCF+-:4 		---- #
-		gSta 	= chr_region[self.chrId-1,1]
-		gEnd 	= chr_region[self.chrId-1,2]
-		nbead 	= int((gEnd-gSta)*Mb/resolution)
+		if self.flag:
+			gSta 	= chr_region[str(self.chrId)][0]
+			gEnd 	= chr_region[str(self.chrId)][1]
+			nbead 	= int((gEnd-gSta)*Mb/resolution)
 
-		#	----	path to raw CTCF list
-		to_path 	= '%s/%s/rawCTCF.%dbp/'%(glb_path,self.celltype,self.cap)
-		ctcf_path 	= '%s/%s_chr%d_ctcf_%dMbTo%dMb.txt'\
-											%(to_path,self.celltype,self.chrId,gSta,gEnd)
+			#	----	path to raw CTCF list
+			to_path 	= '%s/%s/rawCTCF.%dbp/'%(glb_path,self.celltype,self.cap)
+			ctcf_path 	= '%s/%s_chr%d_ctcf_%dMbTo%dMb.txt'\
+							%(to_path,self.celltype,self.chrId,gSta,gEnd)
 
-		#	----	path to input CTCF list (index)
-		gen_path 		= '%s/%s/'%(glb_path,self.celltype)
-		gen_path_pos 	= '%s_chr%d_ctcf_position_From%dMbTo%dMb.txt'\
-												%(self.celltype,self.chrId,gSta,gEnd)
-		gen_path_idx 	= '%s_chr%d_ctcf_index_From%dMbTo%dMb.txt'\
-												%(self.celltype,self.chrId,gSta,gEnd)
+			#	----	path to input CTCF list (index)
+			gen_path 		= '%s/%s/'%(glb_path,self.celltype)
+			gen_path_pos 	= '%s_chr%d_ctcf_position_From%dMbTo%dMb.txt'\
+								%(self.celltype,self.chrId,gSta,gEnd)
+			gen_path_idx 	= '%s_chr%d_ctcf_index_From%dMbTo%dMb.txt'\
+								%(self.celltype,self.chrId,gSta,gEnd)
 
-		ctcfSeq = self.convert2sq(ctcf_path,nbead)
-		ctcfInd = self.extractCtcfConv(nbead,ctcfSeq)
+			ctcfSeq = self.convert2sq(ctcf_path,nbead)
+			ctcfInd = self.extractCtcfConv(nbead,ctcfSeq)
 
-		#	----	write to path for output	---- #
-		writein_2d(gen_path,gen_path_pos,ctcfSeq)
-		writein_2d(gen_path,gen_path_idx,ctcfInd)
+			#	----	write to path for output	---- #
+			writein_2d(gen_path,gen_path_pos,ctcfSeq)
+			writein_2d(gen_path,gen_path_idx,ctcfInd)

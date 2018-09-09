@@ -3,7 +3,6 @@ import sys
 sys.path.append('../../../../src/cs/')
 from Ipt_module import *
 from Params import *
-Params()
 
 from getSettings import getSettings
 from Extraction import *

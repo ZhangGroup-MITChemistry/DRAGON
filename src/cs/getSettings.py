@@ -13,8 +13,11 @@ def getSettings(argv):
 		for opt,arg in opts:
 			if opt=='-h':
 				print('''
->>>> Options: genChromState.py -C <Celltype> -c <chromosome id>
-          or: genChromState.py --Cell <Celltype> --chrom <chromosome id>
+>>>> Options: genChromState.py -C <Celltype> 
+                               -c <chromosome id>
+
+          or: genChromState.py --Cell <Celltype>
+                               --chrom <chromosome id>
 ''')
 				sys.exit()
 			elif opt in ('-C','--Cell'):

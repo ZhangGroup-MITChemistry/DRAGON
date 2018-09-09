@@ -10,12 +10,13 @@ function [simmap,lbl,lbl_tick,celltype,chrId,resolution,nbead,hic_path,hic_norm_
     simmap_path = myparam.simmap_path;
     hic_path = myparam.hic_path;
     hic_norm_path = myparam.hic_norm_path;
+    startnum = myparam.startnum;
+    endnum = myparam.endnum;
     
     % Hi-C map file name index
-    chr_seg = load('../../src/chr_region.txt');
-    sepDist = chr_seg(chrId,3)-chr_seg(chrId,2);
-    gpSta = (chr_seg(chrId,2)+sepDist*0.08)*1E6/resolution+1;
-    gpEnd = (chr_seg(chrId,3)-sepDist*0.12)*1E6/resolution;
+    sepDist = endnum-startnum;
+    gpSta = (startnum+sepDist*0.08)*1E6/resolution+1;
+    gpEnd = (endnum-sepDist*0.12)*1E6/resolution;
     
     % axis indicator
     lbl = [1];

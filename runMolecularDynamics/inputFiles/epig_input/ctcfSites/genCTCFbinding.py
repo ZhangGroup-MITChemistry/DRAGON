@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	
 	Pcs = ProcessCTCFSites()
 	for chrId in chrom_lst:
-		# ---- prepare ctcf motif ---- #
+	# ---- prepare ctcf motif ---- #
 		orilst_lbm = Pcs.extractMotif('lbm',chrId)
 		orilst_known = Pcs.extractMotif('known',chrId)
 		orilst_disc = Pcs.extractMotif('disc',chrId)
@@ -26,17 +26,18 @@ if __name__ == '__main__':
 		try:
 			# ---- process CTCF site decide with near cohesin ---- #
 			# ---- and orientation decided according to motif ---- #
-			final_ctcf_states = Pcs.processingCTCFori(celltype,chrId,orilst_lbm,\
+			final_ctcf_states,flag = Pcs.processingCTCFori(celltype,chrId,orilst_lbm,\
 												orilst_known,orilst_disc,bind_flxb,cap)
 
 			# ---- output the list of ctcf sites ---- #
-			writein_ctcf(celltype,chrId,cap,final_ctcf_states,chr_region)
+			writein_ctcf(celltype,chrId,cap,final_ctcf_states,chr_region,flag)
 
 			# ---- generate the complete list of ctcf index as input to the model ---- #
-			GCInput = GenCTCFinput(celltype,chrId,cap)
+			GCInput = GenCTCFinput(celltype,chrId,cap,flag)
 			GCInput.generate()
 
-			print('''   > CTCF-binding sites for %s, chromosome %d is successfully constructed.'''\
+			if flag:
+				print('''   > CTCF-binding sites for %s, chromosome %d is successfully constructed.'''\
 							%(celltype,chrId))
 		except IOError:
 			print('''

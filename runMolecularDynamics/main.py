@@ -2,8 +2,7 @@
 import sys
 sys.path.append('../src/md/')
 from Ipt_module import *
-from Params import *
-Params()
+import Params
 
 from getSettings import getSettings
 from CreateLAMMPSFile import *
@@ -13,11 +12,12 @@ from submitJobs import *
 if __name__ == '__main__':
 
 	# ---- input settings ---- #
-	celltype,runnum,\
+	celltype,njob,\
 	nNode,ncpu,ptn,simtime,lmpsdir,\
 	nearCtcfThreshold,runStep,\
 	bind_flxb,cap,\
 		chrom_lst=getSettings(sys.argv[1:])
+	Params()
 
 	# ---- epigenomics data ready or not ---- #
 	Ped=ProcessEpigData(celltype,chrom_lst,bind_flxb,cap)
@@ -26,13 +26,13 @@ if __name__ == '__main__':
 
 	# ---- cluster computing or locally ---- #
 	clus_opt=raw_input('''  >> Computing clusters available?[y/n] ''')
-
+	
 	for chrId in chrom_lst:
-		for runId in xrange(runnum):
+		for runId in xrange(njob):
 			# ---- prepare simulation files ---- #
 			Clf=CreateLAMMPSFile(celltype,chrId,runId,\
 								nNode,ncpu,ptn,simtime,lmpsdir,\
-									nearCtcfThreshold,runStep)
+								nearCtcfThreshold,runStep)
 			Clf.createLAMMPSDataFile()
 			Clf.createLAMMPSInputFile()
 

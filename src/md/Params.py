@@ -15,7 +15,8 @@ class Params():
 	glb_path = os.getcwd()
 
 #	---- chromosome segment region
-	chr_region = np.loadtxt('%s/../src/chr_region.txt'%glb_path)
+	with open('%s/../src/chr_region.txt'%glb_path,'r') as f:
+		chr_region = json.load(f)
 
 #	---- LAMMPS input parameters
 	comment = 'coor'

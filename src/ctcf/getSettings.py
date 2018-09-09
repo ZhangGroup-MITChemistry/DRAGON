@@ -10,12 +10,19 @@ def getSettings(argv):
 
 	try:
 		opts,args = getopt.getopt(argv,'hC:b:a:c:',\
-								['Cell=','bindflex=','cap=','chrom='])
+					['Cell=','bindflex=','cap=','chrom='])
 		for opt,arg in opts:
 			if opt=='-h':
 				print('''
->>>> Options: genCTCFbinding.py -C <Celltype> -b <binding flexbility> -a <CTCF-cohesin nearest dist> -c <chromosome id> 
-          or: genCTCFbinding.py --Cell <Celltype> --bindflex <binding flexbility> --cap <CTCF-cohesin nearest dist> --chrom <chromosome id> 
+>>>> Options: genCTCFbinding.py -C <Celltype>
+                                -b <binding flexbility>
+                                -a <CTCF-cohesin nearest dist>
+                                -c <chromosome id> 
+
+          or: genCTCFbinding.py --Cell <Celltype>
+                                --bindflex <binding flexbility>
+                                --cap <CTCF-cohesin nearest dist>
+                                --chrom <chromosome id>
 ''')
 				sys.exit()
 			elif opt in ('-C','--Cell'):
@@ -30,7 +37,7 @@ def getSettings(argv):
 				chrom_lst	= chrom1st+chrom2te
 		print('''
 >>>> Calculating CTCF-binding sites of %s ......'''%Celltype)
-
+		
 		return Celltype,bind_flxb,cap,chrom_lst
 
 	except getopt.GetoptError:
@@ -55,8 +62,13 @@ def getMotifSettings(argv):
 		for opt,arg in opts:
 			if opt=='-h':
 				print('''
->>>> Options: prepareMotif.py -m <motif_name> -p <motif_folder_name_option> -c <chromosome id>
-          or: prepareMotif.py -motif <motif_name> -option <motif_folder_name_option> -chrom <chromosome id>
+>>>> Options: prepareMotif.py -m <motif_name> 
+                              -p <motif_folder_name_option>
+                              -c <chromosome id>
+
+          or: prepareMotif.py -motif <motif_name>
+                              -option <motif_folder_name_option>
+                              -chrom <chromosome id>
 ''')
 				sys.exit()
 			elif opt in ('-m','--motif'):

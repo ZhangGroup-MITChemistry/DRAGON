@@ -15,7 +15,7 @@ from combineMaps import combineMaps
 if __name__ == '__main__':
 
 	# ---- input settings ---- #
-	celltype,runnum,\
+	celltype,njob,\
 	jobname,usrname,ptn,\
 		chrom_lst=getSettings(sys.argv[1:])
 
@@ -25,16 +25,16 @@ if __name__ == '__main__':
 	# ---- cluster available ---- #
 	if clus_opt == 'y':
 		# ---- prepare the job script for calculating cmaps ---- #
-		processingJobScript(celltype,runnum,jobname,ptn,chrom_lst)
+		processingJobScript(celltype,njob,jobname,ptn,chrom_lst)
 
 		# ---- check the job status ---- #
 		checkStatus(usrname,jobname)
 
 	# ---- compute locally ---- #
 	else:
-		calMapLocal(celltype,runnum,chrom_lst)
+		calMapLocal(celltype,njob,chrom_lst)
 
 	# ---- combine the parallel cmaps to ensemble average ---- #
 	for chrId in chrom_lst:
-		combineMaps(celltype,runnum,chrId)
+		combineMaps(celltype,njob,chrId)
 	print

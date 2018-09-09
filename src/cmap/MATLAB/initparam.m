@@ -19,9 +19,17 @@ function myparam = initparam(myparam)
     end
     
     resolutionStr = [num2str(myparam.resolution/1E3,'%d') 'kb'];
-    chr_region=load('../../src/chr_region.txt');
-    myparam.startnum = chr_region(myparam.chrId,2);
-    myparam.endnum = chr_region(myparam.chrId,3);
+    
+    myparam.startnum = input('Enter the start genomic position in Mb (default 20Mb):\n');
+    if isempty(myparam.startnum)
+        myparam.startnum = 20;
+    end
+    
+    myparam.endnum = input('Enter the end genomic position in Mb (default 45Mb):\n');
+    if isempty(myparam.endnum)
+        myparam.endnum = 45;
+    end
+    
     myparam.sepDist = myparam.endnum-myparam.startnum;
     myparam.gpSta = myparam.startnum+myparam.sepDist*0.08;
     myparam.gpEnd = myparam.endnum-myparam.sepDist*0.12;

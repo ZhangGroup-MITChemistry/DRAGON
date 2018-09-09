@@ -13,8 +13,11 @@ def getSettings(argv):
 		for opt,arg in opts:
 			if opt=='-h':
 				print('''
->>>> Options: VMD_main.py -C <Celltype> -c <chromosome id>
-          or: VMD_main.py --Cell <Celltype> --chrom <chromosome id>
+>>>> Options: VMD_main.py -C <Celltype> 
+                          -c <chromosome id>
+
+          or: VMD_main.py --Cell <Celltype>
+                          --chrom <chromosome id>
 ''')
 				sys.exit()
 			elif opt in ('-C','--Cell'):

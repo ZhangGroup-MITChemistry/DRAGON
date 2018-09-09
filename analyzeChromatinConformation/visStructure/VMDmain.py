@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
 	Vmd=VMD()
 	for chrId in chrom_lst:
-		
+
 		# ---- generate individual pdb/psf files ---- #
 		Vmd.genPdb(celltype,chrId)
 		Vmd.genPsf(celltype,chrId)

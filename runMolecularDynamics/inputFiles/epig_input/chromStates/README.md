@@ -9,7 +9,7 @@ A two column txt file will be produced, with the first column indicates the poly
 ### Usage:
 
 ```
-python genChromState.py [-C Celltype] [-c chromosome_id_array]
+python genChromState.py --Cell <Celltype> --chrom <chromosome_id_array>
 ```
 or default:
 ```
@@ -17,7 +17,8 @@ python genChromState.py
 ```
 Note items in [] are optional. By default is calculating: Gm12878, chromosome 1.
 
-**[Celltype]** can be selected from the following list (case sensitive):
+**[--Cell]** can be selected from the following list (case sensitive):
+
 >Gm12878  
 >H1hesc  
 >Hela  
@@ -25,8 +26,9 @@ Note items in [] are optional. By default is calculating: Gm12878, chromosome 1.
 >Huvec  
 >K562
 
-**[chromosome_id_array]** can be any non-repeated subset selected from:
->1 ~ 22
+**[--chrom]** can be any non-repeated subset selected from 1 to 22. The accepted format is:
+
+> 1 10 19 21
 
 The manual would be available by executing:
 ```

@@ -1,6 +1,5 @@
 from Ipt_module import *
 from Params import *
-Params()
 
 import lammps_tools as lmp
 import polymer_tools as poly
@@ -41,25 +40,33 @@ class CreateLAMMPSFile():
 		global _gSta
 		global _gEnd
 		global _sepDist
-		_gSta = chr_region[self.chrId-1,1]
-		_gEnd = chr_region[self.chrId-1,2]
+		try:
+			_gSta = chr_region[str(self.chrId)][0]
+			_gEnd = chr_region[str(self.chrId)][1]
+		except KeyError:
+			with open('%s/../src/chr_region.txt'%glb_path,'r') as f:
+				chr_reg = json.load(f)
+				_gSta = chr_reg[str(self.chrId)][0]
+				_gEnd = chr_reg[str(self.chrId)][1]
 		_sepDist = _gEnd-_gSta
 
+		global _ctcfFile
 		_ctcfFile 	= 	'%s/inputFiles/epig_input/ctcfSites/' \
 						'%s/%s_chr%d_ctcf_position_From%dMbTo%dMb.txt'\
 						%(glb_path,self.celltype,self.celltype,self.chrId,_gSta,_gEnd)
 		_lmpsFolder	=	'%s/inputFiles/lmps_input/%s/'%(glb_path,self.celltype)
 		_dataFile	=	'%s/data.chromosome.init%d'%(self._paramsFolder,_sepDist)
 
+		
+		# ----	generate initial configuration through rondom walk
+		if not os.path.exists(_dataFile):
+			geninit = poly.GenInitConfig(_sepDist,self.lmpsdir,_ctcfFile)
+			geninit.genInitConfig()
+
 		# ----  specify bond and angle
 		hp = lmp.Data()
 		hp.add_bond_type(bond_coeffs,comment)
 		hp.add_angle_type(angle_coeffs,comment)
-		
-		# ----	generate initial configuration through rondom walk
-		if not os.path.exists(_dataFile):
-			geninit = poly.GenInitConfig(_sepDist,self.lmpsdir)
-			geninit.genInitConfig()
 
 		# ----  assign atom types
 		hp.read_from_file(_dataFile)
@@ -80,7 +87,7 @@ class CreateLAMMPSFile():
 						'%s/%s_chr%d_ctcf_index_From%dMbTo%dMb.txt'\
 						%(glb_path,self.celltype,self.celltype,self.chrId,_gSta,_gEnd)
 
-		geninit = poly.GenInitConfig(_sepDist,self.lmpsdir)
+		geninit = poly.GenInitConfig(_sepDist,self.lmpsdir,_ctcfFile)
 		radius 	= geninit.confinement_size()
 
 		# ----  lammps input file with custom random seed

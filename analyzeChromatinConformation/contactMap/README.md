@@ -6,7 +6,7 @@ We provide a python script [`calContactMap.py`](./calContactMap.py) to calculate
 
 Usage:
 ```
-python calContactMap.py [-C Celltype] [-n runnumber] [-j jobname] [-u username] [-i partition] [-c chromosome_id_array]
+python calContactMap.py --Cell <Celltype> --njob <number_of_jobs> --job <jobname> --user <username> --ptn <partition> --chrom <chromosome_id_array>
 ```
 or default:
 ```
@@ -14,7 +14,8 @@ python calContactMap.py
 ```
 Note items in [] are optional. By default is calculating: Gm12878, chromosome 1, 8 parallel running. 
 
-**[Celltype]** can be selected from the following list (case sensitive):
+**[--Cell]** can be selected from the following list (case sensitive):
+
 >Gm12878  
 >H1hesc  
 >Hela  
@@ -22,14 +23,15 @@ Note items in [] are optional. By default is calculating: Gm12878, chromosome 1,
 >Huvec  
 >K562
 
-**[runnumber]** specifies the number of parallel running. By default, the value is 8. 
+**[--njob]** specifies the number of parallel running. By default, the value is 8. 
 
-**[jobname]** specifies the name of the job on the cluster.  
+**[--job]** specifies the name of the job on the cluster.  
 
-**[number_of_cpu]** **[partition]** should be specified based on the cluster account and available cluster partition.  
+**[--user]** **[--ptn]** should be specified based on the cluster account and available cluster partition.  
 
-**chromosome id array]** can be any non-repeated subset selected from:
->1 ~ 22
+**[--chrom]** can be any non-repeated subset selected from 1 to 22. The accepted format is:
+
+> 1 10 19 21
 
 
 The manual would be available by executing:  
@@ -51,4 +53,4 @@ A pack file for the contact map of GM12878 would be downloaded and then unpacked
 
 > Rao, Suhas S.P. et al. *Cell* **159**, 1665-1680 (2014).
 
-Then open [MATLAB](https://www.mathworks.com/products/matlab.html) and execute the script [`visContactMap.m`](./visContactMap.m) to plot the contact map. Type in the parameters such as the cell type and chromosome id accordingly. Leave the option empty if the default is satisfied. Note that the path for the Hi-C maps will be directed to the location where the Hi-C maps are downloaded by default when executing the MATLAB script. 
+Then open [MATLAB](https://www.mathworks.com/products/matlab.html) and execute the script [`visContactMap.m`](./visContactMap.m) to plot the contact map. Type in the parameters such as the cell type, chromosome id and genomic positions accordingly. Leave the option empty if the default is satisfied. Note that the path for the Hi-C maps will be directed to the location where the Hi-C maps are downloaded by default when executing the MATLAB script. 

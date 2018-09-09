@@ -28,7 +28,7 @@ cmap256(:,2) = interp1(linspace(0,1,64),cmap64(:,2), linspace(0,1,1024));
 cmap256(:,3) = interp1(linspace(0,1,64),cmap64(:,3), linspace(0,1,1024));
 set(gcf, 'Colormap', cmap256)
 
-%% Ixznitialization
+%% Initialization
 % initialize the param for sim contact map
 fprintf('\n**** Processing simulated map ****\n\n')
 [simmap,lbl,lbl_tick,...
@@ -45,8 +45,8 @@ if ~exist(hicname,'file')
     fprintf('\n**** Processing Hi-C map ****\n\n')
     % process the hic data
     conv2mat(celltype,chrId,resolution)
-    balanceHiC(celltype,chrId,resolution)
-    normConst(celltype,chrId,resolution)
+    balanceHiC(celltype,chrId,resolution,gpSta,gpEnd)
+    normConst(celltype,chrId,resolution,gpSta,gpEnd)
 end
 
 %% combine Hi-C with simulated map

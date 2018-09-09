@@ -1,13 +1,8 @@
 
-function balanceHiC(celltype,chrId,resolution)
+function balanceHiC(celltype,chrId,resolution,gpSta,gpEnd)
 
     resolution = resolution/1E3;
     resolutionStr = [num2str(resolution,'%d') 'kb'];
-    chr_seg = load('../../src/chr_region.txt');
-    sepDist = chr_seg(chrId,3)-chr_seg(chrId,2);
-    gpSta = (chr_seg(chrId,2)+sepDist*0.08)*1000/resolution+1;
-    gpEnd = (chr_seg(chrId,3)-sepDist*0.12)*1000/resolution;
-
     extract_balanced_hicmat_loop(celltype,chrId,resolutionStr,gpSta,gpEnd)
 
 end

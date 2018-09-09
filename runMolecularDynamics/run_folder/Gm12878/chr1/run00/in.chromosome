@@ -22,8 +22,8 @@ angle_style  	cosine
 angle_coeff   	1 2.0 
 
 #   ----    Energy funtion  ----
-pair_style      hybrid/overlay table linear 10000 tanhlr/cut/ideala 6.0 0 15 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//ucs_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/inputFiles/epig_input/chromStates/Gm12878/Gm12878_chr1_chromatin_states_From20MbTo45Mb.txt tanhlr/cut/ideal 6.0 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//uctcf_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/inputFiles/epig_input/ctcfSites/Gm12878/Gm12878_chr1_ctcf_index_From20MbTo45Mb.txt 4
-pair_coeff       * * table /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension/runMolecularDynamics/../src/md/lmps_input//soft_core_lj_4kT.table soft_core_lj 1.12
+pair_style      hybrid/overlay table linear 10000 tanhlr/cut/ideala 6.0 0 15 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension-release/runMolecularDynamics/../src/md/lmps_input//ucs_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension-release/runMolecularDynamics/inputFiles/epig_input/chromStates/Gm12878/Gm12878_chr1_chromatin_states_From20MbTo45Mb.txt tanhlr/cut/ideal 6.0 /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension-release/runMolecularDynamics/../src/md/lmps_input//uctcf_chrom.txt /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension-release/runMolecularDynamics/inputFiles/epig_input/ctcfSites/Gm12878/Gm12878_chr1_ctcf_index_From20MbTo45Mb.txt 4
+pair_coeff       * * table /nobackup1b/users/qiyf/project_3d_genome/swf-Dragon-extension-release/runMolecularDynamics/../src/md/lmps_input//soft_core_lj_4kT.table soft_core_lj 1.12
 pair_coeff      * *  tanhlr/cut/ideal     0.0  1.76  3.72
 pair_coeff      * *  tanhlr/cut/ideala     0.0 1.76  3.72
 pair_modify     tabinner 0.0000000001 shift yes

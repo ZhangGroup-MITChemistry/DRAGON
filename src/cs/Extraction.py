@@ -1,16 +1,12 @@
 # convert the ChromHMM output
 from Ipt_module import *
 from Params import *
-Params()
 
 class Extraction():
 
 	# ----    Global path 	---- #
 	_cs_folder = 'OUTPUTSAMPLE_5kb_6celltype_15states'
-	_csdir = '%s/../../../../processEpigenomicsData/chromatinStates/%s/'\
-														%(glb_path,_cs_folder)
-	_csfile = ''
-	_todir = ''
+	_csdir = '%s/../../../../processEpigenomicsData/chromatinStates/%s/'%(glb_path,_cs_folder)
 
 
 	def convert2raw(self,celltype,chrId):
@@ -42,25 +38,30 @@ class Extraction():
 
 	def raw2state(self,celltype,chrId,realPos=False):
 	#   ----    Chromatin state file name     ---- #
-		staid = chr_region[chrId-1,1]
-		endid = chr_region[chrId-1,2]
+		staid = chr_region[str(chrId)][0]
+		endid = chr_region[str(chrId)][1]
 		csta = staid * Mb +1
 		cend = endid * Mb
 		outfile = '%s/%s_chr%d_chromatin_states_From%dMbTo%dMb.txt'\
 								%(_todir,celltype,chrId,staid,endid)
 
-		#   ----    generate chrom state file     ---- #
-		fo = open(outfile, 'w')
-		for line in fi.input(_csfile):
-			items = line.split()
-			gpos = int(items[0])
-			#   ----    output the absolute position  ---- #
-			if gpos >=csta and gpos <= cend:
-				if realPos:
-					fo.write('%8d %4d\n'%(gpos,int(items[1][1::])))
-				else:
-					fo.write('%8d %4d\n'%((gpos-csta)/resolution+1,\
-											int(items[1][1::])))
-		fo.close()
-		print('''   > Chromatin state for %s, chromosome %d is successfully generated.'''\
-																		%(celltype,chrId))
+		if not os.path.exists(outfile):
+			#   ----    generate chrom state file     ---- #
+			fo = open(outfile, 'w')
+			for line in fi.input(_csfile):
+				items = line.split()
+				gpos = int(items[0])
+				#   ----    output the absolute position  ---- #
+				if gpos >=csta and gpos <= cend:
+					if realPos:
+						fo.write('%8d %4d\n'%(gpos,int(items[1][1::])))
+					else:
+						fo.write('%8d %4d\n'%((gpos-csta)/resolution+1,\
+												int(items[1][1::])))
+			fo.close()
+			print('''   > Chromatin state for %s, chromosome %d is successfully generated.'''\
+																			%(celltype,chrId))
+		else:
+			print('''   > Chromatin states of %s, chrom%d exists, ready to use!'''\
+																			%(celltype,chrId))
+

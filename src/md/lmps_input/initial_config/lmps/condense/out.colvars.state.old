@@ -1,17 +1,17 @@
 configuration {
-  step          100
+  step            1
   dt 6.000000e-03
-  version 2018-01-17
+  version 2018-04-29
 }
 
 colvar {
   name chrom
-  x  6.48143543163773e+01
+  x  8.66020382645667e+03
 }
 
 restraint {
   configuration {
-    step 100
+    step 1
     name h_pot
   }
 }
