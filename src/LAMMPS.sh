@@ -8,7 +8,7 @@ LMPS_SRC=$SHELL_FOLDER/lammps/
 COLVARS_SRC=$LMPS_FOLDER_SRC/../lib/colvars/
 
 cp $LMPS_SRC/Makefile.openmpi $LMPS_FOLDER_SRC/MAKE/
-cp $LMPS_SRC/force.cpp $LMPS_FOLDER_SRC/
+#cp $LMPS_SRC/force.cpp $LMPS_FOLDER_SRC/
 ln -s $LMPS_SRC/pair_tanhlr_cut_ideal.cpp $LMPS_FOLDER_SRC/pair_tanhlr_cut_ideal.cpp
 ln -s $LMPS_SRC/pair_tanhlr_cut_ideal.h $LMPS_FOLDER_SRC/pair_tanhlr_cut_ideal.h
 ln -s $LMPS_SRC/pair_tanhlr_cut_ideala.cpp $LMPS_FOLDER_SRC/pair_tanhlr_cut_ideala.cpp
