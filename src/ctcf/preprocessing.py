@@ -23,5 +23,5 @@ def prepMotif(file_name,option,chrId):
 def prepNarrowPeak(raw_mat,chrId):
 #	----	This function is to pre-process the narrow peak file 	---- #
 	
-	return region = [[peak[1],peak[2]] for peak in raw_mat \
+	return [[peak[1],peak[2]] for peak in raw_mat \
 							if peak[0] == 'chr%d'%(chrId)]
