@@ -9,11 +9,11 @@ CTCF and Rad21 narrow-peak files can be downloaded by running the following comm
 ```
 cd ./raw.narrowPeak/narrowPeak/; ./download.sh
 ```
-These narrow-peak files are further processed by the python program [`./ctcfBindingSites/processingNarrowPeak.py`](./ctcfBindingSites/processingNarrowPeak.py) into txt files that contain only the genomic positions of individual binding sites for a given chromosome.
+These narrow-peak files are further processed by the python program [`./ctcfBindingSites/prepareNarrowPeak.py`](./ctcfBindingSites/prepareNarrowPeak.py) into txt files that contain only the genomic positions of individual binding sites for a given chromosome.
 
 Usage:
 ```
-python processingNarrowPeak.py [-C Celltype] [-t transcriptional_factor] [-c chromosome_id_array]
+python prepareNarrowPeak.py [-C Celltype] [-t transcriptional_factor] [-c chromosome_id_array]
 ```
 by default is calculating: Gm12878, chromosome 1.
 
